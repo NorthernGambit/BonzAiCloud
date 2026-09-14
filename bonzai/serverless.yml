@@ -1,4 +1,4 @@
-org: northerngambit
+#org: northerngambit
 service: bonzai
 
 provider:
@@ -8,8 +8,24 @@ provider:
     region: eu-north-1
     iam:
         role: ${file(./config.yml):role}
+    environment:
+        TABLE_NAME: !Ref BonzAiTable
+        JWT_SECRET: ${file(./config.yml):jwtSecret}
 
-# functions
+functions:
+    ## Users
+    register:
+        handler: functions/auth/register/index.handler
+        events:
+            - httpApi:
+                  path: /api/auth/register
+                  method: POST
+    login:
+        handler: functions/auth/login/index.handler
+        events:
+            - httpApi:
+                  path: /api/auth/login
+                  method: POST
 
 resources:
     Resources:
