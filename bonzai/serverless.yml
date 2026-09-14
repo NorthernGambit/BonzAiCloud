@@ -9,7 +9,13 @@ provider:
   iam:
     role: ${file(./config.yml):role}
 
-# functions
+functions:
+  getRooms:
+    handler: functions/getRooms/index.handler
+    events:
+      - httpApi:
+          path: /rooms
+          method: get
 
 resources:
   Resources:
