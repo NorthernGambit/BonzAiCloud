@@ -14,3 +14,17 @@ export const getRooms = async () => {
 
 	return result.Items;
 };
+
+export const getRoomById = async (id) => {
+	const result = await db.send(
+		new GetCommand({
+			TableName: 'bonz-ai',
+			Key: {
+				PK: 'ROOM',
+				SK: `ROOM#${id}`,
+			},
+		}),
+	);
+
+	return result.Item;
+};

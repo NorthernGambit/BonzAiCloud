@@ -17,6 +17,13 @@ functions:
           path: /rooms
           method: get
 
+  getRoomById:
+    handler: functions/getRoomById/index.handler
+    events:
+      - httpApi:
+          path: /rooms/{id}
+          method: get
+
 resources:
   Resources:
     BonzAiTable:
