@@ -1,5 +1,5 @@
 import middy from '@middy/core';
-import { getRooms } from '../../../services/rooms.mjs';
+import { getRooms, getAvailableRooms } from '../../../services/rooms.mjs';
 import { sendResponse } from '../../../responses/index.mjs';
 import { errorHandler } from '../../../middlewares/errorHandler.mjs';
 
@@ -46,7 +46,10 @@ const getRoomsHandler = async (event) => {
 		});
 	}
 
-	const rooms = await getRooms();
+	const rooms =
+		startDate !== undefined && endDate !== undefined
+			? await getAvailableRooms(startDate, endDate)
+			: await getRooms();
 
 	return sendResponse(200, rooms);
 };
