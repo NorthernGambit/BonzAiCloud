@@ -10,7 +10,13 @@ provider:
         role: ${file(./config.yml):role}
 
 # functions
-
+functions:
+    createBooking:
+        handler: functions/bookings/createBooking/index.handler
+        events:
+            - httpApi:
+                  path: /api/bookings
+                  method: POST
 resources:
     Resources:
         BonzAiTable:

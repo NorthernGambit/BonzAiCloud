@@ -14,6 +14,6 @@ export const handler = middy(async (event) => {
 		booking,
 	});
 })
-	.use(httpJsonBodyParser)
+	.use(httpJsonBodyParser())
 	.use(validateBody(createBookingSchema))
 	.use(errorHandler());
