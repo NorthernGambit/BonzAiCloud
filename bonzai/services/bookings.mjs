@@ -9,7 +9,7 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { randomUUID } from "node:crypto";
 
-export const createBooking = async (body) => {
+export const createBooking = async (body, userName) => {
 	// can't book room in the past
 	const today = new Date().toISOString().split("T")[0];
 	if (body.checkIn < today) {
@@ -55,7 +55,7 @@ export const createBooking = async (body) => {
 		Item: {
 			PK: `BOOKINGS#${bookingId}`,
 			SK: "DETAILS",
-			GSI1PK: `USER#${"testUser"}`,
+			GSI1PK: `USER#${userName}`,
 			GSI1SK: `BOOKINGS#${body.checkIn}`,
 			checkIn: body.checkIn,
 			checkOut: body.checkOut,

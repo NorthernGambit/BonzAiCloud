@@ -21,7 +21,11 @@ const loginHandler = async (event) => {
 		throw createError(401, "Invalid email or password");
 	}
 
-	const token = generateToken({ sub: user.id, email: user.email });
+	const token = generateToken({
+		sub: user.id,
+		email: user.email,
+		name: user.name,
+	});
 
 	return sendResponse(200, {
 		token,

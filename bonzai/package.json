@@ -4,7 +4,7 @@
 	"description": "BonzAI serverless HTTP API on AWS Lambda",
 	"main": "index.js",
 	"scripts": {
-		"seed": "node scripts/seedRooms.mjs"
+		"seed": "node scripts/seedRooms.js"
 	},
 	"keywords": [],
 	"author": "",
