@@ -1,0 +1,142 @@
+[
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#88f80c9b-3310-47bf-9860-4a9ba3490f98",
+    "type": "single",
+    "maxGuests": 1,
+    "price": 500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#293b0b27-50e1-4d1f-aba6-692f488d9e8e",
+    "type": "single",
+    "maxGuests": 1,
+    "price": 500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#a14ca7ee-790d-4119-bda1-2300d5327d17",
+    "type": "single",
+    "maxGuests": 1,
+    "price": 500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#3fc2508b-0622-42b4-8acd-832430116e3c",
+    "type": "single",
+    "maxGuests": 1,
+    "price": 500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#1683d298-197b-444e-9e01-0010d0f592d1",
+    "type": "single",
+    "maxGuests": 1,
+    "price": 500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#4d188378-1849-4a48-b302-68ac19eab182",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#01baa2de-0c84-438f-a716-58a52f7ecfc2",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#31c68d00-f1dd-4308-8096-54d20a8e4404",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#ed9d3533-d49e-45e7-bbec-1844db3a96d0",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#87dce500-5b62-4190-9835-34218ac7103d",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#1975676c-b93c-444e-a475-c716aab394b5",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#aef63b2e-e224-46dc-8291-c8239f9c6ca9",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#04ca5d36-65a0-4bff-97e4-1186226e2f2f",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#3e2a63ef-e2a4-41c5-92c0-9156d5077b70",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#f0e0576f-0d3a-4eae-b373-c8684bb57e93",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#94878015-9929-483b-a949-7022452d10e7",
+    "type": "suite",
+    "maxGuests": 3,
+    "price": 1500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#c3e57e0f-1c7e-4d57-b6fd-d902ff394b29",
+    "type": "suite",
+    "maxGuests": 3,
+    "price": 1500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#c0e3845c-ebd0-4784-b856-d85388ffc9fe",
+    "type": "suite",
+    "maxGuests": 3,
+    "price": 1500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#2a2b9e9f-722e-403c-8670-faab0000f088",
+    "type": "suite",
+    "maxGuests": 3,
+    "price": 1500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#2523765c-7664-491c-87ef-4d28f64b825a",
+    "type": "suite",
+    "maxGuests": 3,
+    "price": 1500
+  }
+]
