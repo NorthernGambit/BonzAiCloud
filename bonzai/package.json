@@ -1,0 +1,12 @@
+{
+	"type": "module",
+	"dependencies": {
+		"@aws-sdk/client-dynamodb": "^3.1131.0",
+		"@aws-sdk/lib-dynamodb": "^3.1131.0",
+		"@middy/core": "^7.9.2",
+		"@middy/http-error-handler": "^7.9.2",
+		"@middy/http-json-body-parser": "^7.9.2",
+		"http-errors": "^2.0.1",
+		"zod": "^4.6.5"
+	}
+}
