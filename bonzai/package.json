@@ -4,13 +4,15 @@
 	"description": "BonzAI serverless HTTP API on AWS Lambda",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"seed": "node scripts/seedRooms.js"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"type": "module",
 	"dependencies": {
+		"@middy/http-error-handler": "^7.9.2",
 		"@aws-sdk/client-dynamodb": "^3.1131.0",
 		"@aws-sdk/lib-dynamodb": "^3.1131.0",
 		"@middy/core": "^7.9.2",
