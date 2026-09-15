@@ -1,7 +1,7 @@
 import middy from '@middy/core';
-import { getRooms } from '../../services/rooms.mjs';
-import { sendResponse } from '../../responses/index.mjs';
-import { errorHandler } from '../../middlewares/errorHandler.mjs';
+import { getRooms } from '../../../services/rooms.mjs';
+import { sendResponse } from '../../../responses/index.mjs';
+import { errorHandler } from '../../../middlewares/errorHandler.mjs';
 
 const isValidDate = (value) => {
 	if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
