@@ -46,6 +46,13 @@ functions:
             - httpApi:
                   path: /api/bookings
                   method: POST
+    updateBooking:
+        handler: functions/updateBooking/index.handler
+        events:
+            - httpApi:
+                  path: /api/bookings/{id}
+                  method: PATCH
+
 
 resources:
     Resources:
