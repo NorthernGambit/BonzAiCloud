@@ -2,72 +2,78 @@
 service: bonzai
 
 provider:
-  name: aws
-  runtime: nodejs24.x
-  architecture: arm64
-  region: eu-north-1
-  iam:
-    role: ${file(./config.yml):role}
-  environment:
-    TABLE_NAME: !Ref BonzAiTable
-    JWT_SECRET: ${file(./config.yml):jwtSecret}
+    name: aws
+    runtime: nodejs24.x
+    architecture: arm64
+    region: eu-north-1
+    iam:
+        role: ${file(./config.yml):role}
+    environment:
+        TABLE_NAME: !Ref BonzAiTable
+        JWT_SECRET: ${file(./config.yml):jwtSecret}
 
 functions:
-  ## Users
-  register:
-    handler: functions/auth/register/index.handler
-    events:
-      - httpApi:
-          path: /api/auth/register
-          method: POST
-  login:
-    handler: functions/auth/login/index.handler
-    events:
-      - httpApi:
-          path: /api/auth/login
-          method: POST
+    ## Users
+    register:
+        handler: functions/auth/register/index.handler
+        events:
+            - httpApi:
+                  path: /api/auth/register
+                  method: POST
+    login:
+        handler: functions/auth/login/index.handler
+        events:
+            - httpApi:
+                  path: /api/auth/login
+                  method: POST
 
-  getRooms:
-    handler: functions/getRooms/index.handler
-    events:
-      - httpApi:
-          path: /rooms
-          method: get
+    getRooms:
+        handler: functions/getRooms/index.handler
+        events:
+            - httpApi:
+                  path: /rooms
+                  method: get
 
-  getRoomById:
-    handler: functions/getRoomById/index.handler
-    events:
-      - httpApi:
-          path: /rooms/{id}
-          method: get
+    getRoomById:
+        handler: functions/getRoomById/index.handler
+        events:
+            - httpApi:
+                  path: /rooms/{id}
+                  method: get
+    createBooking:
+        handler: functions/bookings/createBooking/index.handler
+        events:
+            - httpApi:
+                  path: /api/bookings
+                  method: POST
 
 resources:
-  Resources:
-    BonzAiTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: bonz-ai
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: PK
-            AttributeType: S
-          - AttributeName: SK
-            AttributeType: S
-          - AttributeName: GSI1PK
-            AttributeType: S
-          - AttributeName: GSI1SK
-            AttributeType: S
-        KeySchema:
-          - AttributeName: PK
-            KeyType: HASH
-          - AttributeName: SK
-            KeyType: RANGE
-        GlobalSecondaryIndexes:
-          - IndexName: GSI1
-            KeySchema:
-              - AttributeName: GSI1PK
-                KeyType: HASH
-              - AttributeName: GSI1SK
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
+    Resources:
+        BonzAiTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: bonz-ai
+                BillingMode: PAY_PER_REQUEST
+                AttributeDefinitions:
+                    - AttributeName: PK
+                      AttributeType: S
+                    - AttributeName: SK
+                      AttributeType: S
+                    - AttributeName: GSI1PK
+                      AttributeType: S
+                    - AttributeName: GSI1SK
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: PK
+                      KeyType: HASH
+                    - AttributeName: SK
+                      KeyType: RANGE
+                GlobalSecondaryIndexes:
+                    - IndexName: GSI1
+                      KeySchema:
+                          - AttributeName: GSI1PK
+                            KeyType: HASH
+                          - AttributeName: GSI1SK
+                            KeyType: RANGE
+                      Projection:
+                          ProjectionType: ALL
