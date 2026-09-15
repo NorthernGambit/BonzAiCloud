@@ -2,30 +2,44 @@
 service: bonzai
 
 provider:
-    name: aws
-    runtime: nodejs24.x
-    architecture: arm64
-    region: eu-north-1
-    iam:
-        role: ${file(./config.yml):role}
-    environment:
-        TABLE_NAME: !Ref BonzAiTable
-        JWT_SECRET: ${file(./config.yml):jwtSecret}
+  name: aws
+  runtime: nodejs24.x
+  architecture: arm64
+  region: eu-north-1
+  iam:
+    role: ${file(./config.yml):role}
+  environment:
+    TABLE_NAME: !Ref BonzAiTable
+    JWT_SECRET: ${file(./config.yml):jwtSecret}
 
 functions:
-    ## Users
-    register:
-        handler: functions/auth/register/index.handler
-        events:
-            - httpApi:
-                  path: /api/auth/register
-                  method: POST
-    login:
-        handler: functions/auth/login/index.handler
-        events:
-            - httpApi:
-                  path: /api/auth/login
-                  method: POST
+  ## Users
+  register:
+    handler: functions/auth/register/index.handler
+    events:
+      - httpApi:
+          path: /api/auth/register
+          method: POST
+  login:
+    handler: functions/auth/login/index.handler
+    events:
+      - httpApi:
+          path: /api/auth/login
+          method: POST
+
+  getRooms:
+    handler: functions/getRooms/index.handler
+    events:
+      - httpApi:
+          path: /rooms
+          method: get
+
+  getRoomById:
+    handler: functions/getRoomById/index.handler
+    events:
+      - httpApi:
+          path: /rooms/{id}
+          method: get
 
 resources:
   Resources:
