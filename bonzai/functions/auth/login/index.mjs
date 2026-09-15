@@ -4,9 +4,9 @@ import createError from "http-errors";
 import { validateBody } from "../../../middlewares/validation.mjs";
 import { errorHandler } from "../../../middlewares/errorHandler.mjs";
 import { sendResponse } from "../../../responses/index.mjs";
-import { loginSchema } from "./schema.mjs";
 import { getUserByEmail } from "../../../services/userService.mjs";
 import { comparePassword, generateToken } from "../../../utils/auth.mjs";
+import { loginSchema } from "../../../models/userModel.mjs";
 
 const loginHandler = async (event) => {
 	const { email, password } = event.body;

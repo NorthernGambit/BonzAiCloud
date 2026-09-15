@@ -5,9 +5,9 @@ import { randomUUID } from "node:crypto";
 import { validateBody } from "../../../middlewares/validation.mjs";
 import { errorHandler } from "../../../middlewares/errorHandler.mjs";
 import { sendResponse } from "../../../responses/index.mjs";
-import { registerSchema } from "./schema.mjs";
 import { getUserByEmail, createUser } from "../../../services/userService.mjs";
 import { hashPassword } from "../../../utils/auth.mjs";
+import { registerSchema } from "../../../models/userModel.mjs";
 
 const registerHandler = async (event) => {
 	const { email, password, name } = event.body;
