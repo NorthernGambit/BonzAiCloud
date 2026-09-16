@@ -1,42 +1,40 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
 	DynamoDBDocumentClient,
 	BatchWriteCommand,
-} from "@aws-sdk/lib-dynamodb";
+} from '@aws-sdk/lib-dynamodb';
 
-const TABLE_NAME = "bonz-ai";
-const REGION = process.env.AWS_REGION || "eu-north-1";
+const TABLE_NAME = 'bonz-ai';
+const REGION = process.env.AWS_REGION || 'eu-north-1';
 
 const client = new DynamoDBClient({ region: REGION });
 const docClient = DynamoDBDocumentClient.from(client);
 
-// Define room configurations: 5 single, 10 double, 5 suites
 const roomConfigs = [
 	...Array.from({ length: 5 }, (_, i) => ({
 		id: 101 + i,
-		type: "single",
+		type: 'single',
 		maxGuests: 1,
 		price: 500,
 	})),
 	...Array.from({ length: 10 }, (_, i) => ({
 		id: 201 + i,
-		type: "double",
+		type: 'double',
 		maxGuests: 2,
-		price: 800,
+		price: 1000,
 	})),
 	...Array.from({ length: 5 }, (_, i) => ({
 		id: 301 + i,
-		type: "suite",
+		type: 'suite',
 		maxGuests: 3,
 		price: 1500,
 	})),
 ];
 
-// Map configs to your DynamoDB single-table schema
 const putRequests = roomConfigs.map((room) => ({
 	PutRequest: {
 		Item: {
-			PK: "ROOM",
+			PK: 'ROOM',
 			SK: `ROOM#${room.id}`,
 			type: room.type,
 			maxGuests: room.maxGuests,
@@ -61,12 +59,12 @@ async function seed() {
 			Object.keys(response.UnprocessedItems).length > 0
 		) {
 			console.warn(
-				"Unprocessed items:",
+				'Unprocessed items:',
 				JSON.stringify(response.UnprocessedItems, null, 2),
 			);
 		}
 	} catch (error) {
-		console.error("Failed to seed rooms:", error);
+		console.error('Failed to seed rooms:', error);
 	}
 }
 

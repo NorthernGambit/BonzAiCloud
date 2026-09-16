@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const createBookingSchema = z
 	.object({
@@ -8,6 +8,6 @@ export const createBookingSchema = z
 		rooms: z.array(z.string().min(1)).min(1),
 	})
 	.refine((data) => data.checkOut > data.checkIn, {
-		message: "checkOut must be after checkIn",
-		path: ["checkOut"],
+		message: 'checkOut must be after checkIn',
+		path: ['checkOut'],
 	});

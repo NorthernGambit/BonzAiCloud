@@ -1,5 +1,4 @@
 import createHttpError from "http-errors";
-import { sendResponse } from "../responses/index.mjs";
 import { db } from "./db.mjs";
 import {
 	GetCommand,
@@ -93,6 +92,49 @@ export const createBooking = async (body, userName) => {
 	};
 };
 
+export const getAllBookings = async (user) => {
+	const command = new QueryCommand({
+		TableName: "bonz-ai",
+		IndexName: "GSI1",
+		KeyConditionExpression: "GSI1PK = :userKey",
+		ExpressionAttributeValues: {
+			":userKey": `USER#${user.name}`,
+		},
+	});
+
+	const response = await db.send(command);
+	const items = response.Items || [];
+
+	if (items.length === 0) return [];
+
+	const formattedBookings = items.map((booking) => {
+		return formatBookingResponse(booking);
+	});
+
+	return formattedBookings;
+};
+
+export const getBookingById = async (id, user) => {
+	const bookingId = `BOOKINGS#${id.toLowerCase().trim()}`;
+
+	const command = new GetCommand({
+		TableName: "bonz-ai",
+		Key: {
+			PK: bookingId,
+			SK: "DETAILS",
+		},
+	});
+
+	const response = await db.send(command);
+	const booking = response.Item;
+
+	if (!booking || booking.GSI1PK !== `USER#${user.name}`) {
+		throw createHttpError(404, "No booking found on the specified ID");
+	}
+
+	return formatBookingResponse(booking);
+};
+
 export const roomsArrayBookingOverlap = async (rooms, checkIn, checkOut) => {
 	for (const room of rooms) {
 		console.log("DEBUG VARIABLES:", {
@@ -150,4 +192,24 @@ const calcDays = (checkIn, checkOut) => {
 	const days = diffInMs / (1000 * 60 * 60 * 24);
 
 	return days;
+};
+
+const formatBookingResponse = (booking) => {
+	const formattedRooms = (booking.rooms || []).map((room) => {
+		return {
+			roomId: room.SK.split("#")[1],
+			maxGuests: room.maxGuests,
+			price: room.price,
+			type: room.type,
+		};
+	});
+
+	return {
+		bookingId: booking.PK.split("#")[1],
+		checkIn: booking.checkIn,
+		checkOut: booking.checkOut,
+		guests: booking.guests,
+		totalPrice: booking.totalPrice,
+		rooms: formattedRooms,
+	};
 };
