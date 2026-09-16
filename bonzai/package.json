@@ -4,6 +4,7 @@
 	"description": "BonzAI serverless HTTP API on AWS Lambda",
 	"main": "index.js",
 	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
 		"seed": "node scripts/seedRooms.js"
 	},
 	"keywords": [],

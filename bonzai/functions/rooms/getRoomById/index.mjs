@@ -1,8 +1,8 @@
 import middy from '@middy/core';
 import createError from 'http-errors';
-import { getRoomById } from '../../services/rooms.mjs';
-import { sendResponse } from '../../responses/index.mjs';
-import { errorHandler } from '../../middlewares/errorHandler.mjs';
+import { getRoomById } from '../../../services/rooms.mjs';
+import { sendResponse } from '../../../responses/index.mjs';
+import { errorHandler } from '../../../middlewares/errorHandler.mjs';
 
 const getRoomByIdHandler = async (event) => {
 	const id = event.pathParameters?.id;
