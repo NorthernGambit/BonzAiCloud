@@ -10,7 +10,6 @@ const REGION = process.env.AWS_REGION || 'eu-north-1';
 const client = new DynamoDBClient({ region: REGION });
 const docClient = DynamoDBDocumentClient.from(client);
 
-// Define room configurations: 5 single, 10 double, 5 suites
 const roomConfigs = [
 	...Array.from({ length: 5 }, (_, i) => ({
 		id: 101 + i,
@@ -32,7 +31,6 @@ const roomConfigs = [
 	})),
 ];
 
-// Map configs to your DynamoDB single-table schema
 const putRequests = roomConfigs.map((room) => ({
 	PutRequest: {
 		Item: {
