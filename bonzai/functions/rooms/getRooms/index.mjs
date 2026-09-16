@@ -16,7 +16,16 @@ const isValidDate = (value) => {
 };
 
 const getRoomsHandler = async (event) => {
-	const { startDate, endDate } = event.queryStringParameters ?? {};
+	const { startDate, endDate, type } = event.queryStringParameters ?? {};
+
+	const allowedTypes = ['single', 'double', 'suite'];
+
+	if (type !== undefined && !allowedTypes.includes(type)) {
+		return sendResponse(400, {
+			message: 'type must be single, double or suite',
+		});
+	}
+
 	if (
 		(startDate !== undefined && endDate === undefined) ||
 		(startDate === undefined && endDate !== undefined)
@@ -51,7 +60,10 @@ const getRoomsHandler = async (event) => {
 			? await getAvailableRooms(startDate, endDate)
 			: await getRooms();
 
-	return sendResponse(200, rooms);
+	const filteredRooms =
+		type !== undefined ? rooms.filter((room) => room.type === type) : rooms;
+
+	return sendResponse(200, filteredRooms);
 };
 
 export const handler = middy(getRoomsHandler).use(errorHandler());
