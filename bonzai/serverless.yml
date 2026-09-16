@@ -46,6 +46,18 @@ functions:
             - httpApi:
                   path: /api/bookings
                   method: POST
+    getBookings:
+        handler: functions/bookings/getBookings/index.handler
+        events:
+            - httpApi:
+                  path: /api/bookings
+                  method: GET
+    getBookingById:
+        handler: functions/bookings/getBookingById/index.handler
+        events:
+            - httpApi:
+                  path: /api/bookings/{id}
+                  method: GET
 
 resources:
     Resources:

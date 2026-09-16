@@ -1,5 +1,4 @@
 import createHttpError from "http-errors";
-import { sendResponse } from "../responses/index.mjs";
 import { db } from "./db.mjs";
 import {
 	GetCommand,
@@ -89,6 +88,63 @@ export const createBooking = async (body, userName) => {
 		rooms: body.rooms,
 		nights,
 		totalPrice,
+	};
+};
+
+export const getAllBookings = async (user) => {
+	const command = new QueryCommand({
+		TableName: "bonz-ai",
+		IndexName: "GSI1",
+		KeyConditionExpression: "GSI1PK = :userKey",
+		ExpressionAttributeValues: {
+			":userKey": `USER#${user.name}`,
+		},
+	});
+
+	const response = await db.send(command);
+	const items = response.Items || [];
+
+	if (items.length === 0) return [];
+
+	const formatedResponse = response.Items.map((booking) => {
+		return {
+			bookingId: booking.PK,
+			checkIn: booking.checkIn,
+			checkOut: booking.checkOut,
+			guests: booking.guests,
+			totalPrice: booking.totalPrice,
+			rooms: booking.rooms,
+		};
+	});
+
+	return formatedResponse;
+};
+
+export const getBookingById = async (id, user) => {
+	const bookingId = `BOOKINGS#${id.toLowerCase().trim()}`;
+
+	const command = new GetCommand({
+		TableName: "bonz-ai",
+		Key: {
+			PK: bookingId,
+			SK: "DETAILS",
+		},
+	});
+
+	const response = await db.send(command);
+	const booking = response.Item;
+
+	if (!booking || booking.GSI1PK !== `USER#${user.name}`) {
+		throw createHttpError(404, "No booking found on the specified ID");
+	}
+
+	return {
+		bookingId: booking.PK,
+		checkIn: booking.checkIn,
+		checkOut: booking.checkOut,
+		guests: booking.guests,
+		totalPrice: booking.totalPrice,
+		rooms: booking.rooms,
 	};
 };
 
