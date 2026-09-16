@@ -13,4 +13,8 @@ export const updateBookingSchema = z
 			message: "checkOut must be after checkIn",
 			path: ["checkOut"],
 		},
-	);
+	)
+
+    .refine((data) => Object.keys(data).length > 0, {
+		message: "At least one field must be provided to update the booking",
+	});

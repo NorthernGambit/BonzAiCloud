@@ -160,6 +160,7 @@ export const updateBooking = async (bookingId, body, userName) => {
 		bookingId,
 		checkIn,
 		checkOut,
+		guests,
 		rooms: roomIds,
 		nights,
 		totalPrice,

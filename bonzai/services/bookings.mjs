@@ -86,6 +86,7 @@ export const createBooking = async (body, userName) => {
 		bookingId,
 		checkIn: body.checkIn,
 		checkOut: body.checkOut,
+		guests: body.guests,
 		rooms: body.rooms,
 		nights,
 		totalPrice,
