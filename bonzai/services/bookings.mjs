@@ -106,18 +106,11 @@ export const getAllBookings = async (user) => {
 
 	if (items.length === 0) return [];
 
-	const formatedResponse = response.Items.map((booking) => {
-		return {
-			bookingId: booking.PK,
-			checkIn: booking.checkIn,
-			checkOut: booking.checkOut,
-			guests: booking.guests,
-			totalPrice: booking.totalPrice,
-			rooms: booking.rooms,
-		};
+	const formattedBookings = items.map((booking) => {
+		return formatBookingResponse(booking);
 	});
 
-	return formatedResponse;
+	return formattedBookings;
 };
 
 export const getBookingById = async (id, user) => {
@@ -138,14 +131,7 @@ export const getBookingById = async (id, user) => {
 		throw createHttpError(404, "No booking found on the specified ID");
 	}
 
-	return {
-		bookingId: booking.PK,
-		checkIn: booking.checkIn,
-		checkOut: booking.checkOut,
-		guests: booking.guests,
-		totalPrice: booking.totalPrice,
-		rooms: booking.rooms,
-	};
+	return formatBookingResponse(booking);
 };
 
 export const roomsArrayBookingOverlap = async (rooms, checkIn, checkOut) => {
@@ -205,4 +191,24 @@ const calcDays = (checkIn, checkOut) => {
 	const days = diffInMs / (1000 * 60 * 60 * 24);
 
 	return days;
+};
+
+const formatBookingResponse = (booking) => {
+	const formattedRooms = (booking.rooms || []).map((room) => {
+		return {
+			roomId: room.SK.split("#")[1],
+			maxGuests: room.maxGuests,
+			price: room.price,
+			type: room.type,
+		};
+	});
+
+	return {
+		bookingId: booking.PK.split("#")[1],
+		checkIn: booking.checkIn,
+		checkOut: booking.checkOut,
+		guests: booking.guests,
+		totalPrice: booking.totalPrice,
+		rooms: formattedRooms,
+	};
 };
