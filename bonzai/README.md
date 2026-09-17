@@ -333,8 +333,8 @@ GSI1SK
 Users:
 
 ```text
-PK       USER#<userId>
-SK       USER#<userId>
+PK       USER#<userEmail>
+SK       PROFILE
 GSI1PK   EMAIL#<email>
 GSI1SK   EMAIL#<email>
 ```
