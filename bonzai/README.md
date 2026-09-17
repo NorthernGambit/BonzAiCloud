@@ -375,7 +375,7 @@ Dessa används för att kontrollera överlappande bokningar.
 | Hämta specifikt rum | `PK = ROOM`, `SK = ROOM#<id>` |
 | Hämta specifik bokning | `PK = BOOKINGS#<id>`, `SK = DETAILS` |
 | Hämta användarens bokningar | `GSI1PK = USER#<email>` |
-| Kontrollera rumsbokningar | `PK = ROOM#<roomId>` |
+| Kontrollera rumsbokningar | `PK = ROOM#<roomId>` `SK = BOOKINGS<checkIn>#datum` |
 
 ---
 
