@@ -8,7 +8,7 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { randomUUID } from "node:crypto";
 
-export const createBooking = async (body, userName) => {
+export const createBooking = async (body, userEmail) => {
 	// can't book room in the past
 	const today = new Date().toISOString().split("T")[0];
 	if (body.checkIn < today) {
@@ -54,7 +54,7 @@ export const createBooking = async (body, userName) => {
 		Item: {
 			PK: `BOOKINGS#${bookingId}`,
 			SK: "DETAILS",
-			GSI1PK: `USER#${userName}`,
+			GSI1PK: `USER#${userEmail}`,
 			GSI1SK: `BOOKINGS#${body.checkIn}`,
 			checkIn: body.checkIn,
 			checkOut: body.checkOut,
@@ -98,7 +98,7 @@ export const getAllBookings = async (user) => {
 		IndexName: "GSI1",
 		KeyConditionExpression: "GSI1PK = :userKey",
 		ExpressionAttributeValues: {
-			":userKey": `USER#${user.name}`,
+			":userKey": `USER#${user.email}`,
 		},
 	});
 
@@ -128,7 +128,7 @@ export const getBookingById = async (id, user) => {
 	const response = await db.send(command);
 	const booking = response.Item;
 
-	if (!booking || booking.GSI1PK !== `USER#${user.name}`) {
+	if (!booking || booking.GSI1PK !== `USER#${user.email}`) {
 		throw createHttpError(404, "No booking found on the specified ID");
 	}
 

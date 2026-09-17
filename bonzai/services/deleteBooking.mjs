@@ -2,7 +2,7 @@ import createHttpError from "http-errors";
 import { db } from "./db.mjs";
 import { GetCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 
-export const deleteBooking = async (bookingId, userName) => {
+export const deleteBooking = async (bookingId, userEmail) => {
 	const getCommand = new GetCommand({
 		TableName: "bonz-ai",
 		Key: {
@@ -16,7 +16,7 @@ export const deleteBooking = async (bookingId, userName) => {
 		throw createHttpError(404, "Booking not found");
 	}
 
-	if (existing.GSI1PK !== `USER#${userName}`) {
+	if (existing.GSI1PK !== `USER#${userEmail}`) {
 		throw createHttpError(403, "You do not have access to this booking");
 	}
 

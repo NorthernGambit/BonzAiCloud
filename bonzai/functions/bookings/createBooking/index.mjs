@@ -8,7 +8,7 @@ import { createBooking } from "../../../services/bookings.mjs";
 import { authenticate } from "../../../middlewares/authentication.mjs";
 
 export const handler = middy(async (event) => {
-	const booking = await createBooking(event.body, event.user.name);
+	const booking = await createBooking(event.body, event.user.email);
 
 	return sendResponse(201, {
 		message: "Booking successfully made!",
