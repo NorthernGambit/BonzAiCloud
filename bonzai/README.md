@@ -6,69 +6,12 @@ API:t hanterar användare, authentication, hotellrum, tillgänglighet och boknin
 
 ---
 
-# Installation
+# Setup
 
-Klona repositoryt:
-
-```bash
-git clone https://github.com/NorthernGambit/BonzAiCloud.git
-```
-
-Gå till projektmappen:
-
-```bash
-cd BonzAiCloud/bonzai
-```
-
-Installera dependencies:
-
-```bash
-npm install
-```
-
-Skapa en lokal `config.yml` i `bonzai`-mappen:
-
-```yml
-role: arn:aws:iam::<AWS_ACCOUNT_ID>:role/<IAM_ROLE_NAME>
-jwtSecret: your-secret-key
-```
-
-`config.yml` finns i `.gitignore` och ska inte commitas.
-
-AWS credentials med rätt behörigheter behöver vara konfigurerade innan deployment.
-
-### Seed rooms
-
-Efter att DynamoDB-tabellen har skapats läggs hotellets rum in med:
-
-```bash
-npm run seed
-```
-
-### Deployment
-
-```bash
-npx serverless deploy
-```
-
-Projektet deployas till AWS-regionen:
-
+base url
 ```text
-eu-north-1
+https://92u8zpyroa.execute-api.eu-north-1.amazonaws.com
 ```
-
-Efter deployment visas API Gateway-URL:en i terminalen.
-
----
-
-# Base URL
-
-```text
-https://<API-ID>.execute-api.eu-north-1.amazonaws.com
-```
-
-> Ersätt med aktuell API Gateway-URL efter deployment.
-
 ---
 
 # Tech stack
@@ -179,12 +122,50 @@ Exempel på response:
 GET /api/rooms
 ```
 
+Exempel på response:
+```json
+[
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#101",
+    "type": "single",
+    "maxGuests": 1,
+    "price": 500
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#201",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  }
+]
+```
 ## Sök tillgängliga rum
 
 ```http
 GET /api/rooms?startDate=2026-09-20&endDate=2026-09-23
 ```
 
+Exempel på response:
+```json
+[
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#202",
+    "type": "double",
+    "maxGuests": 2,
+    "price": 1000
+  },
+  {
+    "PK": "ROOM",
+    "SK": "ROOM#301",
+    "type": "suite",
+    "maxGuests": 3,
+    "price": 1500
+  }
+]
+```
 Filtrera efter rumstyp:
 
 ```http
@@ -211,6 +192,17 @@ Exempel:
 
 ```http
 GET /api/rooms/201
+```
+
+Exempel på response:
+```json
+{
+  "PK": "ROOM",
+  "SK": "ROOM#201",
+  "type": "double",
+  "maxGuests": 2,
+  "price": 1000
+}
 ```
 
 ---
@@ -281,6 +273,67 @@ Returnerar endast den inloggade användarens bokningar.
 GET /api/bookings/{id}
 ```
 
+Exempel på response:
+```json
+{
+  "message": "All bookings successfully retrieved!",
+  "bookings": [
+    {
+      "bookingId": "abc123",
+      "checkIn": "2026-09-20",
+      "checkOut": "2026-09-23",
+      "guests": 3,
+      "totalPrice": 4500,
+      "rooms": [
+        {
+          "roomId": "201",
+          "maxGuests": 2,
+          "price": 1000,
+          "type": "double"
+        },
+        {
+          "roomId": "101",
+          "maxGuests": 1,
+          "price": 500,
+          "type": "single"
+        }
+      ]
+    }
+  ]
+}
+```
+Hämta specifik bokning
+
+GET /api/bookings/{id}
+
+Exempel på response:
+```json
+{
+  "message": "Booking on the specified ID succesfully retrieved!",
+  "booking": {
+    "bookingId": "abc123",
+    "checkIn": "2026-09-20",
+    "checkOut": "2026-09-23",
+    "guests": 3,
+    "totalPrice": 4500,
+    "rooms": [
+      {
+        "roomId": "201",
+        "maxGuests": 2,
+        "price": 1000,
+        "type": "double"
+      },
+      {
+        "roomId": "101",
+        "maxGuests": 1,
+        "price": 500,
+        "type": "single"
+      }
+    ]
+  }
+}
+```
+
 ## Uppdatera bokning
 
 ```http
@@ -298,12 +351,35 @@ Ett eller flera fält kan skickas:
 
 Kapacitet, tillgänglighet och pris kontrolleras på nytt.
 
+Exempel på response:
+```json
+{
+  "message": "Booking successfully updated!",
+  "booking": {
+    "bookingId": "abc123",
+    "checkIn": "2026-09-20",
+    "checkOut": "2026-09-24",
+    "guests": 2,
+    "rooms": ["201", "101"],
+    "nights": 4,
+    "totalPrice": 6000
+  }
+}
+```
+
 ## Avboka bokning
 
 ```http
 DELETE /api/bookings/{id}
 ```
 
+Exempel på response:
+```json
+{
+  "message": "Booking successfully deleted!",
+  "bookingId": "abc123"
+}
+```
 ---
 
 # DynamoDB
@@ -399,3 +475,6 @@ Fel returneras i formatet:
   "message": "Error message"
 }
 ```
+
+# Varför är databasen designad som den är?
+Vår databas är byggd i single-table design, och det blev så efter att vi pratat med Jesper och frågat AI om olika access patterns. Vi valde att använda userEmail som en unik identifierare för våran auth. Rooms är byggd på ett snarlikt sätt. Vi använde booking som PK med en unik identifierare sen använde vi userEmail på GSI1PK för att kunna hämta ut alla bokningar på en användare. GSI1SK sparar vi vår checkIn som inte används nu men som var tänkt att kunna sortera en användares bokningar i kronologisk ordning, t.ex. För varje rum i en bokning så skapas en hjälpreferens som vi använder för att kolla om ett specifikt rum är bokat inom en viss datumperiod. Det förhindrar dubbelbokningar.  
