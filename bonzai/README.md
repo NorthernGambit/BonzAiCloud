@@ -411,8 +411,6 @@ Users:
 ```text
 PK       USER#<userEmail>
 SK       PROFILE
-GSI1PK   EMAIL#<email>
-GSI1SK   EMAIL#<email>
 ```
 
 Rooms:
