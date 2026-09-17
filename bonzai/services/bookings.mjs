@@ -38,7 +38,7 @@ export const createBooking = async (body, userEmail) => {
 	if (!overlapCheck.success) {
 		throw createHttpError(
 			409,
-			`${overlapCheck.occupiedRoom} is already booked in this date range!`,
+			`Room with roomID ${overlapCheck.occupiedRoom.split("#")[1]} is already booked in this date range!`,
 		);
 	}
 
