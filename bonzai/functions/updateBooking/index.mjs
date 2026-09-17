@@ -10,7 +10,11 @@ import { authenticate } from "../../middlewares/authentication.mjs";
 export const handler = middy(async (event) => {
 	const bookingId = event.pathParameters?.id;
 
-	const booking = await updateBooking(bookingId, event.body, event.user.name);
+	const booking = await updateBooking(
+		bookingId,
+		event.body,
+		event.user.email,
+	);
 
 	return sendResponse(200, {
 		message: "Booking successfully updated!",

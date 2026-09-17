@@ -33,7 +33,12 @@ const calcDays = (checkIn, checkOut) => {
 	return diffInMs / (1000 * 60 * 60 * 24);
 };
 
-const roomsBookingOverlapExcluding = async (rooms, checkIn, checkOut, excludeBookingId) => {
+const roomsBookingOverlapExcluding = async (
+	rooms,
+	checkIn,
+	checkOut,
+	excludeBookingId,
+) => {
 	for (const room of rooms) {
 		const command = new QueryCommand({
 			TableName: "bonz-ai",
@@ -58,7 +63,7 @@ const roomsBookingOverlapExcluding = async (rooms, checkIn, checkOut, excludeBoo
 	return { success: true };
 };
 
-export const updateBooking = async (bookingId, body, userName) => {
+export const updateBooking = async (bookingId, body, userEmail) => {
 	const getCommand = new GetCommand({
 		TableName: "bonz-ai",
 		Key: {
@@ -72,7 +77,7 @@ export const updateBooking = async (bookingId, body, userName) => {
 		throw createHttpError(404, "Booking not found");
 	}
 
-	if (existing.GSI1PK !== `USER#${userName}`) {
+	if (existing.GSI1PK !== `USER#${userEmail}`) {
 		throw createHttpError(403, "You do not have access to this booking");
 	}
 
@@ -80,7 +85,8 @@ export const updateBooking = async (bookingId, body, userName) => {
 	const checkOut = body.checkOut ?? existing.checkOut;
 	const guests = body.guests ?? existing.guests;
 	const roomIds =
-		body.rooms ?? existing.rooms.map((room) => room.SK.replace("ROOM#", ""));
+		body.rooms ??
+		existing.rooms.map((room) => room.SK.replace("ROOM#", ""));
 
 	const today = new Date().toISOString().split("T")[0];
 	if (checkIn < today) {
@@ -120,7 +126,7 @@ export const updateBooking = async (bookingId, body, userName) => {
 		Item: {
 			PK: `BOOKINGS#${bookingId}`,
 			SK: "DETAILS",
-			GSI1PK: `USER#${userName}`,
+			GSI1PK: `USER#${userEmail}`,
 			GSI1SK: `BOOKINGS#${checkIn}`,
 			checkIn,
 			checkOut,
